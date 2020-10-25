@@ -15,8 +15,8 @@ export default function(app) {
     app.use(methodOverride())
     app.use(cookieParser('secret-value'))
     const __dirname = dirname(fileURLToPath(import.meta.url))
-    app.use(express.static(path.join(__dirname, '../public/')))
-    app.set('views', path.join(__dirname, '../views'))
+    app.use(express.static(path.join(__dirname, 'public/')))
+    app.set('views', 'views')
     app.set('view engine', 'hbs')
 
     if (app.get('env') === 'development') {
