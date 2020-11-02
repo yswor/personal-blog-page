@@ -1,4 +1,4 @@
-export default settings = {
+export default {
     cookieSecret: 'myblog', 
     db: 'blog', 
     host: 'localhost',

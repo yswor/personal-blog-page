@@ -8,14 +8,31 @@ import routes from '../routes/index.mjs'
 import settings from './settings.mjs'
 import session from 'express-session'
 import connectMongo from 'connect-mongo'
-
-const MongoStore = connectMongo(session)
+import flash from 'connect-flash'
 
 export default function(app) {
     app.use(morgan('dev'))
     app.use(bodyParser.urlencoded({extended: true}))
     app.use(bodyParser.json())
     app.use(methodOverride())
+    app.use(flash())
+
+    const MongoStore = connectMongo(session)
+    const store = new MongoStore({
+        db: settings.db,
+        host: settings.host,
+        port: settings.port,
+        url: `mongodb://${settings.host}:${settings.port}/blog`
+    })
+    app.use(session({
+        secret: settings.cookieSecret,
+        key: settings.db,
+        cookie: { maxAge: 1000 * 60 * 60 * 24 * 30 }, // 30天
+        store,
+        saveUninitialized: false,
+        resave: false
+    }))
+
     app.use(cookieParser('secret-value'))
     app.use(express.static('public/'))
     app.set('views', 'views')
@@ -25,16 +42,6 @@ export default function(app) {
         app.use(errorHandler())
     }
 
-    app.use(session({
-        secret: settings.cookieSecret,
-        key: settings.db,
-        cookie: { maxAge: 1000 * 60 * 60 * 24 * 30 }, // 30天
-        store: new MongoStore({
-            db: settings.db,
-            host: settings.host,
-            port: settings.port
-        })
-    }))
 
     routes(app)
 

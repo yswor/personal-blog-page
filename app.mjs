@@ -1,5 +1,5 @@
 import express from 'express'
-import configure from './config/middlewareConfig.mjs'
+import configure from './config/app.mjs'
 
 const app = configure(express())
 
