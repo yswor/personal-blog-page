@@ -1,6 +1,6 @@
 const post = {
     index(req, res) {
-         res.send('The post:index controller')
+         res.render('')
     },
     create(req, res) {
         res.send('The post:create controller')
